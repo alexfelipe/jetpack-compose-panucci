@@ -40,7 +40,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import br.com.alexf.panucci.ui.screens.HomeScreen
+import br.com.alexf.panucci.ui.screens.HighlightsListScreen
 import br.com.alexf.panucci.ui.theme.PanucciTheme
 import kotlinx.coroutines.launch
 
@@ -54,7 +54,7 @@ class MainActivity : ComponentActivity() {
                     color = MaterialTheme.colorScheme.background
                 ) {
                     App {
-                        HomeScreen()
+                        HighlightsListScreen()
                     }
                 }
             }
