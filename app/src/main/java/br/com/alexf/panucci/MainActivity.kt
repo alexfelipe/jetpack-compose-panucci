@@ -95,9 +95,10 @@ fun App(content: @Composable (AppRoute) -> Unit) {
                 Spacer(Modifier.height(12.dp))
                 items.forEach { item ->
                     val route = item.first
+                    val icon = item.second
                     val name = route.route
                     NavigationDrawerItem(
-                        icon = { Icon(Icons.Filled.Favorite, contentDescription = null) },
+                        icon = { Icon(icon, contentDescription = null) },
                         label = { Text(name) },
                         selected = route == selectedRoute,
                         onClick = {
