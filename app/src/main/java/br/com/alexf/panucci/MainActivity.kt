@@ -40,9 +40,13 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import br.com.alexf.panucci.routes.AppRoute
+import br.com.alexf.panucci.ui.screens.DrinksListScreen
 import br.com.alexf.panucci.ui.screens.HighlightsListScreen
+import br.com.alexf.panucci.ui.screens.MenuListScreen
 import br.com.alexf.panucci.ui.theme.PanucciTheme
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.selects.select
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -53,8 +57,18 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    App {
-                        HighlightsListScreen()
+                    App { route ->
+                        when (route) {
+                            is AppRoute.HighlightsList -> {
+                                HighlightsListScreen()
+                            }
+                            is AppRoute.Menu -> {
+                                MenuListScreen()
+                            }
+                            is AppRoute.Drinks -> {
+                                DrinksListScreen()
+                            }
+                        }
                     }
                 }
             }
@@ -64,35 +78,31 @@ class MainActivity : ComponentActivity() {
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun App(content: @Composable () -> Unit) {
-    var selectedItem by remember {
-        mutableStateOf(0)
+fun App(content: @Composable (AppRoute) -> Unit) {
+    var selectedRoute: AppRoute by remember {
+        mutableStateOf(AppRoute.HighlightsList)
     }
     val items = listOf(
-        "Destaques" to Icons.Filled.AutoAwesome,
-        "Menu" to Icons.Filled.RestaurantMenu,
-        "Bebidas" to Icons.Outlined.LocalBar
+        AppRoute.HighlightsList to Icons.Filled.AutoAwesome,
+        AppRoute.Menu to Icons.Filled.RestaurantMenu,
+        AppRoute.Drinks to Icons.Outlined.LocalBar
     )
     val scope = rememberCoroutineScope()
     val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
-
     ModalNavigationDrawer(
         drawerContent = {
             ModalDrawerSheet {
                 Spacer(Modifier.height(12.dp))
                 items.forEach { item ->
-                    val name = item.first
+                    val route = item.first
+                    val name = route.route
                     NavigationDrawerItem(
                         icon = { Icon(Icons.Filled.Favorite, contentDescription = null) },
                         label = { Text(name) },
-                        selected = items.indexOfFirst { pair ->
-                            pair.first == name
-                        } == selectedItem,
+                        selected = route == selectedRoute,
                         onClick = {
                             scope.launch { drawerState.close() }
-                            selectedItem = items.indexOfFirst { pair ->
-                                pair.first == name
-                            }
+                            selectedRoute = route
                         },
                         modifier = Modifier.padding(NavigationDrawerItemDefaults.ItemPadding)
                     )
@@ -121,14 +131,15 @@ fun App(content: @Composable () -> Unit) {
             },
             bottomBar = {
                 NavigationBar {
-                    items.forEachIndexed { index, item ->
-                        val label = item.first
+                    items.forEach { item ->
+                        val route = item.first
+                        val label = route.route
                         val icon = item.second
                         NavigationBarItem(
                             icon = { Icon(icon, contentDescription = label) },
                             label = { Text(label) },
-                            selected = selectedItem == index,
-                            onClick = { selectedItem = index }
+                            selected = selectedRoute == route,
+                            onClick = { selectedRoute = route }
                         )
                     }
                 }
@@ -137,7 +148,7 @@ fun App(content: @Composable () -> Unit) {
             Box(
                 modifier = Modifier.padding(it)
             ) {
-                content()
+                content(selectedRoute)
             }
         }
     }
