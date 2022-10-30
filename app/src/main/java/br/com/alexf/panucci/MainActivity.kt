@@ -10,14 +10,15 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AutoAwesome
-import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.Menu
+import androidx.compose.material.icons.filled.PointOfSale
 import androidx.compose.material.icons.filled.RestaurantMenu
 import androidx.compose.material.icons.outlined.AccountCircle
 import androidx.compose.material.icons.outlined.LocalBar
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -41,12 +42,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import br.com.alexf.panucci.routes.AppRoute
+import br.com.alexf.panucci.ui.screens.CheckoutScreen
 import br.com.alexf.panucci.ui.screens.DrinksListScreen
 import br.com.alexf.panucci.ui.screens.HighlightsListScreen
 import br.com.alexf.panucci.ui.screens.MenuListScreen
 import br.com.alexf.panucci.ui.theme.PanucciTheme
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.selects.select
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -59,14 +60,20 @@ class MainActivity : ComponentActivity() {
                 ) {
                     App { route ->
                         when (route) {
-                            is AppRoute.HighlightsList -> {
+                            AppRoute.HighlightsList -> {
                                 HighlightsListScreen()
                             }
-                            is AppRoute.Menu -> {
+
+                            AppRoute.Menu -> {
                                 MenuListScreen()
                             }
-                            is AppRoute.Drinks -> {
+
+                            AppRoute.Drinks -> {
                                 DrinksListScreen()
+                            }
+
+                            AppRoute.Checkout -> {
+                                CheckoutScreen()
                             }
                         }
                     }
@@ -79,10 +86,16 @@ class MainActivity : ComponentActivity() {
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun App(content: @Composable (AppRoute) -> Unit) {
+    val routes = listOf(
+        AppRoute.HighlightsList,
+        AppRoute.Menu,
+        AppRoute.Drinks,
+        AppRoute.Checkout
+    )
     var selectedRoute: AppRoute by remember {
         mutableStateOf(AppRoute.HighlightsList)
     }
-    val items = listOf(
+    val bottomNavRoutes = listOf(
         AppRoute.HighlightsList to Icons.Filled.AutoAwesome,
         AppRoute.Menu to Icons.Filled.RestaurantMenu,
         AppRoute.Drinks to Icons.Outlined.LocalBar
@@ -93,10 +106,10 @@ fun App(content: @Composable (AppRoute) -> Unit) {
         drawerContent = {
             ModalDrawerSheet {
                 Spacer(Modifier.height(12.dp))
-                items.forEach { item ->
+                bottomNavRoutes.forEach { item ->
                     val route = item.first
-                    val icon = item.second
                     val name = route.route
+                    val icon = item.second
                     NavigationDrawerItem(
                         icon = { Icon(icon, contentDescription = null) },
                         label = { Text(name) },
@@ -131,20 +144,34 @@ fun App(content: @Composable (AppRoute) -> Unit) {
                 })
             },
             bottomBar = {
-                NavigationBar {
-                    items.forEach { item ->
-                        val route = item.first
-                        val label = route.route
-                        val icon = item.second
-                        NavigationBarItem(
-                            icon = { Icon(icon, contentDescription = label) },
-                            label = { Text(label) },
-                            selected = selectedRoute == route,
-                            onClick = { selectedRoute = route }
+                if (bottomNavRoutes.find {
+                        it.first == selectedRoute
+                    } != null)
+                    NavigationBar {
+                        bottomNavRoutes.forEach { item ->
+                            val route = item.first
+                            val label = route.route
+                            val icon = item.second
+                            NavigationBarItem(
+                                icon = { Icon(icon, contentDescription = label) },
+                                label = { Text(label) },
+                                selected = selectedRoute == route,
+                                onClick = { selectedRoute = route }
+                            )
+                        }
+                    }
+            },
+            floatingActionButton = {
+                if (selectedRoute == AppRoute.Drinks || selectedRoute == AppRoute.Menu) {
+                    FloatingActionButton(
+                        onClick = { selectedRoute = AppRoute.Checkout }) {
+                        Icon(
+                            Icons.Filled.PointOfSale,
+                            contentDescription = null
                         )
                     }
                 }
-            },
+            }
         ) {
             Box(
                 modifier = Modifier.padding(it)
