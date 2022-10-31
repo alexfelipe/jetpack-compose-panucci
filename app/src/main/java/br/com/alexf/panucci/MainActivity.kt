@@ -41,7 +41,14 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavDestination
+import androidx.navigation.NavDestination.Companion.hierarchy
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.currentBackStackEntryAsState
+import androidx.navigation.compose.rememberNavController
 import br.com.alexf.panucci.routes.AppRoute
+import br.com.alexf.panucci.routes.AppRoute.Checkout.route
 import br.com.alexf.panucci.ui.screens.CheckoutScreen
 import br.com.alexf.panucci.ui.screens.DrinksListScreen
 import br.com.alexf.panucci.ui.screens.HighlightsListScreen
@@ -52,28 +59,39 @@ import kotlinx.coroutines.launch
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
         setContent {
+            val navController = rememberNavController()
+            val navBackStackEntry by navController.currentBackStackEntryAsState()
+            val currentDestination = navBackStackEntry?.destination
             PanucciTheme {
                 Surface(
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    App { route ->
-                        when (route) {
-                            AppRoute.HighlightsList -> {
+                    App(
+                        currentDestination,
+                        onRouteChange = {
+                            navController.navigate(it)
+                        },
+                        onFabClick = {
+                            navController.navigate(AppRoute.Checkout.route)
+                        }) {
+                        NavHost(
+                            navController = navController,
+                            startDestination = AppRoute.HighlightsList.route
+                        ) {
+                            composable(AppRoute.HighlightsList.route) {
                                 HighlightsListScreen()
                             }
-
-                            AppRoute.Menu -> {
+                            composable(AppRoute.Menu.route) {
                                 MenuListScreen()
                             }
-
-                            AppRoute.Drinks -> {
-                                DrinksListScreen()
-                            }
-
-                            AppRoute.Checkout -> {
+                            composable(AppRoute.Checkout.route) {
                                 CheckoutScreen()
+                            }
+                            composable(AppRoute.Drinks.route) {
+                                DrinksListScreen()
                             }
                         }
                     }
@@ -85,16 +103,13 @@ class MainActivity : ComponentActivity() {
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun App(content: @Composable (AppRoute) -> Unit) {
-    val routes = listOf(
-        AppRoute.HighlightsList,
-        AppRoute.Menu,
-        AppRoute.Drinks,
-        AppRoute.Checkout
-    )
-    var selectedRoute: AppRoute by remember {
-        mutableStateOf(AppRoute.HighlightsList)
-    }
+fun App(
+    currentDestination: NavDestination? = null,
+    onRouteChange: (String) -> Unit = {},
+    onFabClick: () -> Unit = {},
+    content: @Composable () -> Unit
+) {
+    val currentRoute = currentDestination?.route ?: AppRoute.HighlightsList.route
     val bottomNavRoutes = listOf(
         AppRoute.HighlightsList to Icons.Filled.AutoAwesome,
         AppRoute.Menu to Icons.Filled.RestaurantMenu,
@@ -107,16 +122,15 @@ fun App(content: @Composable (AppRoute) -> Unit) {
             ModalDrawerSheet {
                 Spacer(Modifier.height(12.dp))
                 bottomNavRoutes.forEach { item ->
-                    val route = item.first
-                    val name = route.route
+                    val name = item.first.route
                     val icon = item.second
                     NavigationDrawerItem(
                         icon = { Icon(icon, contentDescription = null) },
                         label = { Text(name) },
-                        selected = route == selectedRoute,
+                        selected = currentRoute == name,
                         onClick = {
                             scope.launch { drawerState.close() }
-                            selectedRoute = route
+                            onRouteChange(name)
                         },
                         modifier = Modifier.padding(NavigationDrawerItemDefaults.ItemPadding)
                     )
@@ -145,26 +159,32 @@ fun App(content: @Composable (AppRoute) -> Unit) {
             },
             bottomBar = {
                 if (bottomNavRoutes.find {
-                        it.first == selectedRoute
-                    } != null)
+                        it.first.route == currentRoute
+                    } != null) {
                     NavigationBar {
                         bottomNavRoutes.forEach { item ->
-                            val route = item.first
-                            val label = route.route
+                            val label = item.first.route
                             val icon = item.second
                             NavigationBarItem(
                                 icon = { Icon(icon, contentDescription = label) },
                                 label = { Text(label) },
-                                selected = selectedRoute == route,
-                                onClick = { selectedRoute = route }
+                                selected = currentRoute == label,
+                                onClick = {
+                                    onRouteChange(label)
+                                }
                             )
                         }
                     }
+                }
             },
             floatingActionButton = {
-                if (selectedRoute == AppRoute.Drinks || selectedRoute == AppRoute.Menu) {
+                if (
+                    currentRoute == AppRoute.Drinks.route ||
+                    currentRoute == AppRoute.Menu.route
+                ) {
                     FloatingActionButton(
-                        onClick = { selectedRoute = AppRoute.Checkout }) {
+                        onClick = onFabClick
+                    ) {
                         Icon(
                             Icons.Filled.PointOfSale,
                             contentDescription = null
@@ -176,7 +196,7 @@ fun App(content: @Composable (AppRoute) -> Unit) {
             Box(
                 modifier = Modifier.padding(it)
             ) {
-                content(selectedRoute)
+                content()
             }
         }
     }
