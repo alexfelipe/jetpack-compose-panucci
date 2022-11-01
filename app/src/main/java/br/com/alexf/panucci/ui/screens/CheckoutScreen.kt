@@ -31,7 +31,9 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import br.com.alexf.panucci.model.Product
 import br.com.alexf.panucci.sampledata.sampleProducts
+import br.com.alexf.panucci.ui.components.CheckoutItemCard
 import br.com.alexf.panucci.ui.components.HorizontalCard
 import br.com.alexf.panucci.ui.theme.PanucciTheme
 
@@ -58,7 +60,7 @@ fun CheckoutScreen() {
                 Spacer(modifier = Modifier.height(16.dp))
             }
             items(5) {
-                HorizontalCard(product = sampleProducts.random())
+                CheckoutItemCard(product = sampleProducts.random())
                 Spacer(Modifier.height(16.dp))
             }
             item {
@@ -168,6 +170,8 @@ fun CheckoutScreen() {
         }
     }
 }
+
+
 
 @Preview(heightDp = 400)
 @Preview

@@ -1,6 +1,7 @@
 package br.com.alexf.panucci.ui.components
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -31,6 +32,7 @@ import java.math.BigDecimal
 fun StackedCard(
     product: Product,
     modifier: Modifier = Modifier,
+    onClick: () -> Unit = {}
 ) {
     Card(
         modifier
@@ -55,7 +57,6 @@ fun StackedCard(
                 )
             ) {
                 Text(text = product.name)
-                //TODO format to currency
                 Text(text = product.price.toString())
                 Spacer(Modifier.height(16.dp))
                 Text(text = product.description)
@@ -72,6 +73,10 @@ fun StackedCard(
                         Color(0xFF6750A4),
                         shape = RoundedCornerShape(100)
                     )
+                    .clip(shape = RoundedCornerShape(100))
+                    .clickable {
+                        onClick()
+                    }
                     .padding(
                         horizontal = 24.dp,
                         vertical = 12.dp

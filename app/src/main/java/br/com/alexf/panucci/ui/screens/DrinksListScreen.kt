@@ -1,6 +1,5 @@
 package br.com.alexf.panucci.ui.screens
 
-import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -31,7 +30,6 @@ fun DrinksListScreen() {
         columns = GridCells.Fixed(2),
         horizontalArrangement = Arrangement.spacedBy(16.dp)
     ) {
-
         item(span = {
             GridItemSpan(2)
         }) {
