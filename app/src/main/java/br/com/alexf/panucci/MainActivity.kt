@@ -1,6 +1,7 @@
 package br.com.alexf.panucci
 
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.Box
@@ -45,6 +46,8 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import br.com.alexf.panucci.routes.AppRoute
+import br.com.alexf.panucci.ui.components.AppModalDrawerSheet
+import br.com.alexf.panucci.ui.navigation.AppNavHost
 import br.com.alexf.panucci.ui.screens.CheckoutScreen
 import br.com.alexf.panucci.ui.screens.DrinksListScreen
 import br.com.alexf.panucci.ui.screens.HighlightsListScreen
@@ -78,25 +81,10 @@ class MainActivity : ComponentActivity() {
                         onFabClick = {
                             navController.navigate(AppRoute.Checkout.route)
                         }) {
-                        NavHost(
+                        AppNavHost(
                             navController = navController,
-                            startDestination = AppRoute.HighlightsList.route
-                        ) {
-                            composable(AppRoute.HighlightsList.route) {
-                                HighlightsListScreen(onHighlightClick = {
-                                    navController.navigate(AppRoute.Checkout.route)
-                                })
-                            }
-                            composable(AppRoute.Menu.route) {
-                                MenuListScreen()
-                            }
-                            composable(AppRoute.Checkout.route) {
-                                CheckoutScreen()
-                            }
-                            composable(AppRoute.Drinks.route) {
-                                DrinksListScreen()
-                            }
-                        }
+                            startDestination = AppRoute.Login.route
+                        )
                     }
                 }
             }
@@ -122,43 +110,30 @@ fun App(
     val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
     ModalNavigationDrawer(
         drawerContent = {
-            ModalDrawerSheet {
-                Spacer(Modifier.height(12.dp))
-                bottomNavRoutes.forEach { item ->
-                    val name = item.first.route
-                    val icon = item.second
-                    NavigationDrawerItem(
-                        icon = { Icon(icon, contentDescription = null) },
-                        label = { Text(name) },
-                        selected = currentRoute == name,
-                        onClick = {
-                            scope.launch { drawerState.close() }
-                            onRouteChange(name)
-                        },
-                        modifier = Modifier.padding(NavigationDrawerItemDefaults.ItemPadding)
-                    )
-                }
-            }
+            AppModalDrawerSheet()
         },
         drawerState = drawerState,
     ) {
         Scaffold(
             topBar = {
-                CenterAlignedTopAppBar(title = {
-                    Text(text = "Restorante Panucci")
-                }, navigationIcon = {
-                    IconButton(onClick = {
-                        scope.launch {
-                            drawerState.open()
+                if (bottomNavRoutes.any { it.first.route == currentRoute }
+                ) {
+                    CenterAlignedTopAppBar(title = {
+                        Text(text = "Restorante Panucci")
+                    }, navigationIcon = {
+                        IconButton(onClick = {
+                            scope.launch {
+                                drawerState.open()
+                            }
+                        }) {
+                            Icon(Icons.Filled.Menu, contentDescription = null)
                         }
-                    }) {
-                        Icon(Icons.Filled.Menu, contentDescription = null)
-                    }
-                }, actions = {
-                    IconButton(onClick = { /*TODO*/ }) {
-                        Icon(Icons.Outlined.AccountCircle, null)
-                    }
-                })
+                    }, actions = {
+                        IconButton(onClick = { /*TODO*/ }) {
+                            Icon(Icons.Outlined.AccountCircle, null)
+                        }
+                    })
+                }
             },
             bottomBar = {
                 if (bottomNavRoutes.find {

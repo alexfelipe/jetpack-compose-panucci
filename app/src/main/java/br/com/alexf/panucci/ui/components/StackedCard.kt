@@ -24,6 +24,7 @@ import androidx.compose.ui.tooling.preview.datasource.LoremIpsum
 import androidx.compose.ui.unit.dp
 import br.com.alexf.panucci.R
 import br.com.alexf.panucci.model.Product
+import br.com.alexf.panucci.sampledata.sampleProducts
 import br.com.alexf.panucci.ui.theme.PanucciTheme
 import coil.compose.AsyncImage
 import java.math.BigDecimal

@@ -24,14 +24,15 @@ import kotlin.random.Random
 
 @Composable
 fun DrinksListScreen() {
+    val columns = 2
     LazyVerticalGrid(
         contentPadding = PaddingValues(16.dp),
         verticalArrangement = Arrangement.spacedBy(16.dp),
-        columns = GridCells.Fixed(2),
+        columns = GridCells.Fixed(columns),
         horizontalArrangement = Arrangement.spacedBy(16.dp)
     ) {
         item(span = {
-            GridItemSpan(2)
+            GridItemSpan(columns)
         }) {
             Surface {
                 Text(
