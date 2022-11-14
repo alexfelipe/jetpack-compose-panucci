@@ -27,8 +27,7 @@ import br.com.alexf.panucci.ui.theme.caveatFont
 fun HighlightsListScreen(
     modifier: Modifier = Modifier,
     products: List<Product> = emptyList(),
-    onHighlightClick: () -> Unit = {},
-    onSaveClick: () -> Unit = {}
+    onHighlightClick: () -> Unit = {}
 ) {
     LazyColumn(
         modifier,
@@ -41,10 +40,7 @@ fun HighlightsListScreen(
                     text = "Destaques do dia",
                     Modifier
                         .fillMaxWidth()
-                        .padding(vertical = 8.dp)
-                        .clickable {
-                            onSaveClick()
-                        },
+                        .padding(vertical = 8.dp),
                     fontFamily = caveatFont,
                     fontSize = 32.sp,
                     textAlign = TextAlign.Center

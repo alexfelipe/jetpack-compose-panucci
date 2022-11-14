@@ -5,7 +5,7 @@ import androidx.navigation.compose.composable
 import br.com.alexf.panucci.AppRoutes
 import br.com.alexf.panucci.ui.screens.SignUpScreen
 
-internal fun NavGraphBuilder.signUpScreen(
+fun NavGraphBuilder.signUpScreen(
     onPopBackStack: () -> Unit
 ) {
     composable(AppRoutes.SignUp.route) {

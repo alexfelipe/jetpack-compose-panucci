@@ -6,7 +6,7 @@ import androidx.navigation.compose.composable
 import br.com.alexf.panucci.AppRoutes
 import br.com.alexf.panucci.ui.screens.LoginScreen
 
-internal fun NavGraphBuilder.signInScreen(
+fun NavGraphBuilder.signInScreen(
     onNavigateToHome: () -> Unit,
     onNavigateToSignUp: () -> Unit
 ) {

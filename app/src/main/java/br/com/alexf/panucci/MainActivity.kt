@@ -15,9 +15,9 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.NavDestination
-import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import br.com.alexf.panucci.navigation.navigateToCheckoutScreen
 import br.com.alexf.panucci.ui.components.PanucciBottomAppBar
 import br.com.alexf.panucci.ui.components.PanucciTopAppBar
 import br.com.alexf.panucci.ui.theme.PanucciTheme
@@ -41,17 +41,11 @@ class MainActivity : ComponentActivity() {
                 ) {
                     PanucciApp(
                         currentDestination,
-                        onRouteChange = {
-                            navController.navigate(it) {
-                                popUpTo(navController.graph.findStartDestination().id) {
-                                    saveState = true
-                                }
-                                launchSingleTop = true
-                                restoreState = true
-                            }
+                        onItemSelectedChange = { route ->
+                            navController.navigateSingleTopTo(route)
                         },
                         onFabClick = {
-                            navController.navigate(AppRoutes.Checkout.route)
+                            navController.navigateToCheckoutScreen()
                         }) {
                         AppNavHost(
                             navController = navController,
@@ -62,13 +56,14 @@ class MainActivity : ComponentActivity() {
             }
         }
     }
+
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun PanucciApp(
     currentDestination: NavDestination? = null,
-    onRouteChange: (String) -> Unit = {},
+    onItemSelectedChange: (String) -> Unit = {},
     onFabClick: () -> Unit = {},
     content: @Composable () -> Unit
 ) {
@@ -88,7 +83,7 @@ fun PanucciApp(
             if (isShowScaffoldBars) {
                 PanucciBottomAppBar(
                     currentRoute = currentRoute,
-                    onItemChange = onRouteChange,
+                    onItemChange = onItemSelectedChange,
                     items = panucciBottomAppBarScreens
                 )
             }

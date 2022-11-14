@@ -5,7 +5,7 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.navigation
 import br.com.alexf.panucci.AppRoutes
 
-internal fun NavGraphBuilder.loginGraph(
+fun NavGraphBuilder.loginGraph(
     navController: NavController
 ) {
     navigation(
@@ -15,7 +15,8 @@ internal fun NavGraphBuilder.loginGraph(
         signInScreen(
             onNavigateToHome = {
                 navigateToHome(navController)
-            }, onNavigateToSignUp = {
+            },
+            onNavigateToSignUp = {
                 navigateToSignUp(navController)
             })
         signUpScreen(
