@@ -6,10 +6,13 @@ import br.com.alexf.panucci.AppRoutes
 import br.com.alexf.panucci.sampledata.sampleProducts
 import br.com.alexf.panucci.ui.screens.DrinksListScreen
 
-fun NavGraphBuilder.drinksScreen() {
+fun NavGraphBuilder.drinksScreen(
+    onNavigateToProductsDetails: (String) -> Unit = {}
+) {
     composable(AppRoutes.Drinks.route) {
         DrinksListScreen(
-            products = sampleProducts
+            products = sampleProducts,
+            onNavigateToProductDetails = onNavigateToProductsDetails
         )
     }
 }

@@ -6,10 +6,13 @@ import br.com.alexf.panucci.AppRoutes
 import br.com.alexf.panucci.sampledata.sampleProducts
 import br.com.alexf.panucci.ui.screens.MenuListScreen
 
-fun NavGraphBuilder.menuScreen() {
+fun NavGraphBuilder.menuScreen(
+    onNavigateToProductDetails: (String) -> Unit = {}
+) {
     composable(AppRoutes.Menu.route) {
         MenuListScreen(
-            products = sampleProducts
+            products = sampleProducts,
+            onProductClick = onNavigateToProductDetails
         )
     }
 }

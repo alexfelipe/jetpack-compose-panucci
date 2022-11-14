@@ -14,7 +14,7 @@ fun NavGraphBuilder.loginGraph(
     ) {
         signInScreen(
             onNavigateToHome = {
-                navController.navigateToHome()
+                navController.navigateToHighlightListScreen()
             },
             onNavigateToSignUp = {
                 navController.navigateToSignUp()

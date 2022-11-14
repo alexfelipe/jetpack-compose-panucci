@@ -24,7 +24,6 @@ import androidx.compose.ui.tooling.preview.datasource.LoremIpsum
 import androidx.compose.ui.unit.dp
 import br.com.alexf.panucci.R
 import br.com.alexf.panucci.model.Product
-import br.com.alexf.panucci.sampledata.sampleProducts
 import br.com.alexf.panucci.ui.theme.PanucciTheme
 import coil.compose.AsyncImage
 import java.math.BigDecimal
@@ -33,7 +32,7 @@ import java.math.BigDecimal
 fun StackedCard(
     product: Product,
     modifier: Modifier = Modifier,
-    onClick: () -> Unit = {}
+    onAskClick: () -> Unit = {}
 ) {
     Card(
         modifier
@@ -76,7 +75,7 @@ fun StackedCard(
                     )
                     .clip(shape = RoundedCornerShape(100))
                     .clickable {
-                        onClick()
+                        onAskClick()
                     }
                     .padding(
                         horizontal = 24.dp,

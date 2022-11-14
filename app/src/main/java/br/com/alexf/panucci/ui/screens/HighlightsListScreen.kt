@@ -27,7 +27,8 @@ import br.com.alexf.panucci.ui.theme.caveatFont
 fun HighlightsListScreen(
     modifier: Modifier = Modifier,
     products: List<Product> = emptyList(),
-    onHighlightClick: () -> Unit = {}
+    onAskClick: () -> Unit = {},
+    onProductClick: (String) -> Unit = {}
 ) {
     LazyColumn(
         modifier,
@@ -50,7 +51,10 @@ fun HighlightsListScreen(
         items(products) { p ->
             StackedCard(
                 product = p,
-                onClick = onHighlightClick
+                Modifier.clickable {
+                    onProductClick(p.id)
+                },
+                onAskClick = onAskClick
             )
         }
     }

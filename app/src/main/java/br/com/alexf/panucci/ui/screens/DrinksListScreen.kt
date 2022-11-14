@@ -1,5 +1,6 @@
 package br.com.alexf.panucci.ui.screens
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -27,6 +28,7 @@ fun DrinksListScreen(
     modifier: Modifier = Modifier,
     products: List<Product> = emptyList(),
     columns: Int = 2,
+    onNavigateToProductDetails: (String) -> Unit = {}
 ) {
     LazyVerticalGrid(
         columns = GridCells.Fixed(columns),
@@ -52,11 +54,14 @@ fun DrinksListScreen(
         }
         items(products) { p ->
             SimpleStackedCard(
-                product = p
+                product = p,
+                modifier
+                    .clickable {
+                        onNavigateToProductDetails(p.id)
+                    }
             )
         }
     }
-
 }
 
 @Preview

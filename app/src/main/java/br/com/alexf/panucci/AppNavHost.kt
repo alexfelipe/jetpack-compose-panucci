@@ -5,9 +5,7 @@ import androidx.navigation.NavController
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
-import br.com.alexf.panucci.navigation.checkoutScreen
-import br.com.alexf.panucci.navigation.loginGraph
-import br.com.alexf.panucci.navigation.mainGraph
+import br.com.alexf.panucci.navigation.*
 
 @Composable
 fun AppNavHost(
@@ -19,8 +17,29 @@ fun AppNavHost(
         startDestination = startDestination
     ) {
         loginGraph(navController)
-        mainGraph(navController)
+        highlightListScreen(
+            onNavigateToCheckout = {
+                navController.navigateToCheckoutScreen()
+            },
+            onNavigateToProductDetails = { productId ->
+                navController.navigateToProductDetails(productId = productId)
+            })
+        menuScreen(
+            onNavigateToProductDetails = { productId ->
+                navController.navigateToProductDetails(productId = productId)
+            }
+        )
+        drinksScreen(
+            onNavigateToProductsDetails = { productId ->
+                navController.navigateToProductDetails(productId = productId)
+            }
+        )
         checkoutScreen()
+        productDetailsScreen(
+            onNavigateToCheckout = {
+                navController.navigateToCheckoutScreen()
+            }
+        )
     }
 }
 
