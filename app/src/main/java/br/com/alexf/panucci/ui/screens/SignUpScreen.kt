@@ -18,7 +18,7 @@ import br.com.alexf.panucci.ui.theme.PanucciTheme
 @Composable
 fun SignUpScreen(
     modifier: Modifier = Modifier,
-    onSignUpClick: () -> Unit = {}
+    onPopBackStack: () -> Unit = {}
 ) {
     Column(
         modifier
@@ -78,7 +78,7 @@ fun SignUpScreen(
             onClick = {
                 isPasswordConfirmed = password == confirmPassword
                 if (isPasswordConfirmed) {
-                    onSignUpClick()
+                    onPopBackStack()
                 }
             },
             Modifier

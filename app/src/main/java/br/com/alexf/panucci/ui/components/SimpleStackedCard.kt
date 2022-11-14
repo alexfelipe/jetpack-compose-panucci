@@ -1,15 +1,12 @@
 package br.com.alexf.panucci.ui.components
 
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.heightIn
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.Immutable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
@@ -27,12 +24,13 @@ fun SimpleStackedCard(
     Card(
         modifier
             .width(158.dp)
-            .height(200.dp),
+            .heightIn(200.dp),
         shape = RoundedCornerShape(12.dp)
     ) {
         AsyncImage(
             model = product.image,
             contentDescription = null,
+            modifier = Modifier.fillMaxHeight(0.5f)
         )
         Column(Modifier.padding(16.dp)) {
             Text(
@@ -40,7 +38,10 @@ fun SimpleStackedCard(
                 maxLines = 2,
                 overflow = TextOverflow.Ellipsis
             )
-            Text(text = product.price.toPlainString())
+            Text(
+                text = product.price.toPlainString(),
+                maxLines = 1
+            )
         }
     }
 }

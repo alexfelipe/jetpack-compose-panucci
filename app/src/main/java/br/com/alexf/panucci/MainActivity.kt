@@ -4,32 +4,23 @@ import android.os.Bundle
 import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.activity.viewModels
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.AutoAwesome
-import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material.icons.filled.PointOfSale
-import androidx.compose.material.icons.filled.RestaurantMenu
-import androidx.compose.material.icons.outlined.AccountCircle
-import androidx.compose.material.icons.outlined.LocalBar
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.NavDestination
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
-import br.com.alexf.panucci.routes.AppRoute
-import br.com.alexf.panucci.ui.components.AppModalDrawerSheet
-import br.com.alexf.panucci.ui.navigation.AppNavHost
+import br.com.alexf.panucci.ui.components.PanucciBottomAppBar
+import br.com.alexf.panucci.ui.components.PanucciTopAppBar
 import br.com.alexf.panucci.ui.theme.PanucciTheme
-import kotlinx.coroutines.launch
 
 class MainActivity : ComponentActivity() {
 
@@ -48,7 +39,7 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    App(
+                    PanucciApp(
                         currentDestination,
                         onRouteChange = {
                             navController.navigate(it) {
@@ -60,11 +51,11 @@ class MainActivity : ComponentActivity() {
                             }
                         },
                         onFabClick = {
-                            navController.navigate(AppRoute.Checkout.route)
+                            navController.navigate(AppRoutes.Checkout.route)
                         }) {
                         AppNavHost(
                             navController = navController,
-                            startDestination = AppRoute.Login.route
+                            startDestination = AppRoutes.Login.route
                         )
                     }
                 }
@@ -75,98 +66,64 @@ class MainActivity : ComponentActivity() {
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun App(
+fun PanucciApp(
     currentDestination: NavDestination? = null,
     onRouteChange: (String) -> Unit = {},
     onFabClick: () -> Unit = {},
     content: @Composable () -> Unit
 ) {
-    val currentRoute = currentDestination?.route ?: AppRoute.HighlightsList.route
-    val bottomNavRoutes = listOf(
-        AppRoute.HighlightsList to Icons.Filled.AutoAwesome,
-        AppRoute.Menu to Icons.Filled.RestaurantMenu,
-        AppRoute.Drinks to Icons.Outlined.LocalBar
-    )
-    val scope = rememberCoroutineScope()
-    val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
-    ModalNavigationDrawer(
-        drawerContent = {
-            AppModalDrawerSheet()
-        },
-        drawerState = drawerState,
-    ) {
-        Scaffold(
-            topBar = {
-                if (bottomNavRoutes.any { it.first.route == currentRoute }
-                ) {
-                    CenterAlignedTopAppBar(title = {
-                        Text(text = "Restorante Panucci")
-                    }, navigationIcon = {
-                        IconButton(onClick = {
-                            scope.launch {
-                                drawerState.open()
-                            }
-                        }) {
-                            Icon(Icons.Filled.Menu, contentDescription = null)
-                        }
-                    }, actions = {
-                        IconButton(onClick = { /*TODO*/ }) {
-                            Icon(Icons.Outlined.AccountCircle, null)
-                        }
-                    })
-                }
-            },
-            bottomBar = {
-                if (bottomNavRoutes.find {
-                        it.first.route == currentRoute
-                    } != null) {
-                    NavigationBar {
-                        bottomNavRoutes.forEach { item ->
-                            val label = item.first.route
-                            val icon = item.second
-                            NavigationBarItem(
-                                icon = { Icon(icon, contentDescription = label) },
-                                label = { Text(label) },
-                                selected = currentRoute == label,
-                                onClick = {
-                                    onRouteChange(label)
-                                }
-                            )
-                        }
-                    }
-                }
-            },
-            floatingActionButton = {
-                if (
-                    currentRoute == AppRoute.Drinks.route ||
-                    currentRoute == AppRoute.Menu.route
-                ) {
-                    FloatingActionButton(
-                        onClick = onFabClick
-                    ) {
-                        Icon(
-                            Icons.Filled.PointOfSale,
-                            contentDescription = null
-                        )
-                    }
-                }
-            }
-        ) {
-            Box(
-                modifier = Modifier.padding(it)
+    val currentRoute = currentDestination?.route ?: AppRoutes.HighlightsList.route
+    val isShowScaffoldBars = panucciBottomAppBarScreens.any {
+        it.first.route == currentRoute
+    }
+    Scaffold(
+        topBar = {
+            if (isShowScaffoldBars
             ) {
-                content()
+                PanucciTopAppBar(onProfileClick = {
+                })
             }
+        },
+        bottomBar = {
+            if (isShowScaffoldBars) {
+                PanucciBottomAppBar(
+                    currentRoute = currentRoute,
+                    onItemChange = onRouteChange,
+                    items = panucciBottomAppBarScreens
+                )
+            }
+        },
+        floatingActionButton = {
+            if (
+                panucciCheckoutFabScreens.any {
+                    it.route == currentRoute
+                }
+            ) {
+                FloatingActionButton(
+                    onClick = onFabClick
+                ) {
+                    Icon(
+                        Icons.Filled.PointOfSale,
+                        contentDescription = null
+                    )
+                }
+            }
+        }
+    ) {
+        Box(
+            modifier = Modifier.padding(it)
+        ) {
+            content()
         }
     }
 }
 
 @Preview
 @Composable
-fun AppPreview() {
+private fun PanucciAppPreview() {
     PanucciTheme {
         Surface {
-            App {}
+            PanucciApp {}
         }
     }
 }

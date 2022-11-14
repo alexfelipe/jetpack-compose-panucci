@@ -20,8 +20,8 @@ import br.com.alexf.panucci.ui.theme.caveatFont
 @Composable
 fun LoginScreen(
     modifier: Modifier = Modifier,
-    onSignInClick: () -> Unit = {},
-    onSignUpClick: () -> Unit = {}
+    onNavigateToHome: () -> Unit = {},
+    onNavigateToSignUp: () -> Unit = {}
 ) {
     Column(
         modifier
@@ -85,10 +85,10 @@ fun LoginScreen(
         val buttonModifier = Modifier
             .padding(horizontal = 16.dp)
             .fillMaxWidth()
-        Button(onClick = onSignInClick, buttonModifier) {
+        Button(onClick = onNavigateToHome, buttonModifier) {
             Text(text = "Sign In")
         }
-        TextButton(onClick = onSignUpClick, buttonModifier) {
+        TextButton(onClick = onNavigateToSignUp, buttonModifier) {
             Text(text = "Sign Up")
         }
     }
