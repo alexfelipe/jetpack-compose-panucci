@@ -1,14 +1,6 @@
 package br.com.alexf.panucci.ui.components
 
-import android.widget.Space
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxHeight
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.*
 import androidx.compose.material3.Card
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -23,12 +15,16 @@ import androidx.compose.ui.unit.sp
 import br.com.alexf.panucci.R
 import br.com.alexf.panucci.model.Product
 import br.com.alexf.panucci.sampledata.sampleProducts
+import br.com.alexf.panucci.ui.theme.PanucciTheme
 import coil.compose.AsyncImage
 
 @Composable
-fun HorizontalCard(product: Product) {
+fun HorizontalCard(
+    product: Product,
+    modifier: Modifier = Modifier
+) {
     Card(
-        Modifier
+        modifier
             .fillMaxWidth()
             .height(80.dp)
     ) {
@@ -71,5 +67,7 @@ fun HorizontalCard(product: Product) {
 @Preview
 @Composable
 fun HorizontalCardPreview() {
-    HorizontalCard(sampleProducts.random())
+    PanucciTheme {
+        HorizontalCard(product = sampleProducts.random())
+    }
 }

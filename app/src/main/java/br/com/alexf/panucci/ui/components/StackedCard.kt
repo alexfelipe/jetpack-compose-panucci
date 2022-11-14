@@ -114,15 +114,13 @@ fun StackedCardPreview() {
 @Composable
 fun StackedCardWithImagePreview() {
     PanucciTheme {
-        Surface {
-            StackedCard(
-                Product(
-                    name = LoremIpsum(20).values.first(),
-                    price = BigDecimal("9.99"),
-                    description = LoremIpsum(50).values.first(),
-                    image = ""
-                )
+        StackedCard(
+            Product(
+                name = LoremIpsum(20).values.first(),
+                price = BigDecimal("9.99"),
+                description = LoremIpsum(50).values.first(),
+                image = ""
             )
-        }
+        )
     }
 }

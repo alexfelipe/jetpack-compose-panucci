@@ -17,10 +17,11 @@ import br.com.alexf.panucci.ui.theme.PanucciTheme
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SignUpScreen(
+    modifier: Modifier = Modifier,
     onSignUpClick: () -> Unit = {}
 ) {
     Column(
-        Modifier
+        modifier
             .fillMaxSize()
             .verticalScroll(rememberScrollState())
     ) {

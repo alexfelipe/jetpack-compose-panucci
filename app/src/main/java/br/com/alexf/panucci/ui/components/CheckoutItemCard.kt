@@ -45,8 +45,14 @@ import br.com.alexf.panucci.ui.theme.PanucciTheme
 import coil.compose.AsyncImage
 
 @Composable
-fun CheckoutItemCard(product: Product) {
-    Card(shape = RoundedCornerShape(12.dp)) {
+fun CheckoutItemCard(
+    product: Product,
+    modifier: Modifier = Modifier
+) {
+    Card(
+        modifier,
+        shape = RoundedCornerShape(12.dp)
+    ) {
         Row(
             Modifier
                 .fillMaxWidth()

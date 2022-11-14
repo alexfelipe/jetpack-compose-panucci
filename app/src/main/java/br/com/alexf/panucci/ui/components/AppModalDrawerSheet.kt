@@ -1,10 +1,7 @@
 package br.com.alexf.panucci.ui.components
 
-import android.graphics.drawable.Icon
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.FactCheck
-import androidx.compose.material.icons.filled.ReceiptLong
 import androidx.compose.material.icons.outlined.FactCheck
 import androidx.compose.material.icons.outlined.ReceiptLong
 import androidx.compose.material3.*
@@ -22,8 +19,11 @@ data class NavigationDrawerItemModel(
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun AppModalDrawerSheet(onItemClick: () -> Unit = {}) {
-    ModalDrawerSheet {
+fun AppModalDrawerSheet(
+    modifier: Modifier = Modifier,
+    onItemClick: () -> Unit = {}
+) {
+    ModalDrawerSheet(modifier) {
         Spacer(Modifier.height(12.dp))
         NavigationDrawerItem(
             label = { Text("Mesa 03") },

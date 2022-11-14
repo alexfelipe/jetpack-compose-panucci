@@ -14,6 +14,7 @@ import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.AccountBalanceWallet
@@ -38,9 +39,12 @@ import br.com.alexf.panucci.ui.components.HorizontalCard
 import br.com.alexf.panucci.ui.theme.PanucciTheme
 
 @Composable
-fun CheckoutScreen() {
+fun CheckoutScreen(
+    modifier: Modifier = Modifier,
+    products: List<Product> = emptyList()
+) {
     Box(
-        Modifier.fillMaxSize()
+        modifier.fillMaxSize()
     ) {
         LazyColumn(
             Modifier.fillMaxWidth(),
@@ -59,8 +63,8 @@ fun CheckoutScreen() {
                 )
                 Spacer(modifier = Modifier.height(16.dp))
             }
-            items(5) {
-                CheckoutItemCard(product = sampleProducts.random())
+            items(products) { p ->
+                CheckoutItemCard(product = p)
                 Spacer(Modifier.height(16.dp))
             }
             item {
@@ -171,15 +175,14 @@ fun CheckoutScreen() {
     }
 }
 
-
-
-@Preview(heightDp = 400)
 @Preview
 @Composable
 fun CheckoutScreenPreview() {
     PanucciTheme {
         Surface {
-            CheckoutScreen()
+            CheckoutScreen(
+                products = sampleProducts
+            )
         }
     }
 }

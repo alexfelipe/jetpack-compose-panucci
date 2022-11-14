@@ -7,28 +7,32 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.GridItemSpan
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.tooling.preview.datasource.LoremIpsum
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import br.com.alexf.panucci.model.Product
+import br.com.alexf.panucci.sampledata.sampleProducts
 import br.com.alexf.panucci.ui.components.SimpleStackedCard
+import br.com.alexf.panucci.ui.theme.PanucciTheme
 import br.com.alexf.panucci.ui.theme.caveatFont
-import java.math.BigDecimal
-import kotlin.random.Random
 
 @Composable
-fun DrinksListScreen() {
-    val columns = 2
+fun DrinksListScreen(
+    modifier: Modifier = Modifier,
+    products: List<Product> = emptyList(),
+    columns: Int = 2,
+) {
     LazyVerticalGrid(
+        columns = GridCells.Fixed(columns),
+        modifier,
         contentPadding = PaddingValues(16.dp),
         verticalArrangement = Arrangement.spacedBy(16.dp),
-        columns = GridCells.Fixed(columns),
         horizontalArrangement = Arrangement.spacedBy(16.dp)
     ) {
         item(span = {
@@ -46,14 +50,9 @@ fun DrinksListScreen() {
                 )
             }
         }
-        items(10) {
+        items(products) { p ->
             SimpleStackedCard(
-                product = Product(
-                    name = LoremIpsum(Random.nextInt(10)).values.first(),
-                    price = BigDecimal("9.99"),
-                    description = LoremIpsum(Random.nextInt(30)).values.first(),
-                    image = "https://picsum.photos/1920/1080"
-                )
+                product = p
             )
         }
     }
@@ -63,5 +62,11 @@ fun DrinksListScreen() {
 @Preview
 @Composable
 fun DrinksListScreenPreview() {
-    DrinksListScreen()
+    PanucciTheme {
+        Surface {
+            DrinksListScreen(
+                products = sampleProducts
+            )
+        }
+    }
 }

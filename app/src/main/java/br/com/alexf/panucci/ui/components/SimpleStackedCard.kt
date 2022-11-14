@@ -25,7 +25,8 @@ fun SimpleStackedCard(
     modifier: Modifier = Modifier
 ) {
     Card(
-        modifier.width(158.dp)
+        modifier
+            .width(158.dp)
             .height(200.dp),
         shape = RoundedCornerShape(12.dp)
     ) {
@@ -48,8 +49,6 @@ fun SimpleStackedCard(
 @Composable
 fun SimpleStackedCardPreview() {
     PanucciTheme {
-        Surface {
-            SimpleStackedCard(product = sampleProducts.random())
-        }
+        SimpleStackedCard(product = sampleProducts.random())
     }
 }
