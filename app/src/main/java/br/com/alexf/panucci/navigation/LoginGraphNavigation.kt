@@ -14,10 +14,10 @@ fun NavGraphBuilder.loginGraph(
     ) {
         signInScreen(
             onNavigateToHome = {
-                navigateToHome(navController)
+                navController.navigateToHome()
             },
             onNavigateToSignUp = {
-                navigateToSignUp(navController)
+                navController.navigateToSignUp()
             })
         signUpScreen(
             onPopBackStack = navController::popBackStack

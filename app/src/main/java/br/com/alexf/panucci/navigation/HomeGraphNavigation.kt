@@ -1,7 +1,6 @@
 package br.com.alexf.panucci.navigation
 
 import androidx.navigation.NavController
-import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import androidx.navigation.navigation
@@ -16,9 +15,15 @@ fun NavGraphBuilder.mainGraph(
     ) {
         highlightListScreen(
             onNavigateToCheckout = {
-                navController.navigateToCheckoutScreen()
+                navController.navigateToSignUp()
             })
         menuScreen()
         drinksScreen()
+    }
+}
+
+fun NavController.navigateToHome() {
+    navigate(AppRoutes.Home.route) {
+        popUpTo(AppRoutes.Login.route)
     }
 }
