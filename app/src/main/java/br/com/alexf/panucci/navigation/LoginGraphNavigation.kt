@@ -1,7 +1,9 @@
 package br.com.alexf.panucci.navigation
 
 import androidx.navigation.NavController
+import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavGraphBuilder
+import androidx.navigation.navOptions
 import androidx.navigation.navigation
 import br.com.alexf.panucci.AppRoutes
 
@@ -14,7 +16,11 @@ fun NavGraphBuilder.loginGraph(
     ) {
         signInScreen(
             onNavigateToHome = {
-                navController.navigateToHighlightListScreen()
+                navController.navigateToHighlightListScreen(
+                    navOptions {
+                        popUpTo(0)
+                    }
+                )
             },
             onNavigateToSignUp = {
                 navController.navigateToSignUp()

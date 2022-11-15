@@ -11,10 +11,10 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.PointOfSale
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.navigation.NavDestination
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import br.com.alexf.panucci.navigation.navigateToCheckoutScreen
@@ -28,21 +28,28 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             val navController = rememberNavController()
-            val navBackStackEntry by navController.currentBackStackEntryAsState()
-            val destinations = navController.backQueue.map {
-                "${it.destination.route} "
+            LaunchedEffect(Unit) {
+                navController.addOnDestinationChangedListener { controller, _, _ ->
+                    val destinations = controller.backQueue.map { it.destination.route }
+                    Log.i("MainActivity", "onCreate: destinations $destinations")
+                }
             }
-            Log.i("MainActivity", "onCreate: $destinations")
-            val currentDestination = navBackStackEntry?.destination
+            val navBackStackEntry by navController.currentBackStackEntryAsState()
+            val currentDestination = navBackStackEntry?.destination?.route
             PanucciTheme {
                 Surface(
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
                     PanucciApp(
-                        currentDestination,
+                        currentDestination ?: AppRoutes.HighlightsList.route,
                         onItemSelectedChange = { route ->
-                            navController.navigateSingleTopTo(route)
+                            navController.navigate(route) {
+                                popUpTo(0) {
+                                    saveState = true
+                                }
+                                restoreState = true
+                            }
                         },
                         onFabClick = {
                             navController.navigateToCheckoutScreen()
@@ -62,12 +69,11 @@ class MainActivity : ComponentActivity() {
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun PanucciApp(
-    currentDestination: NavDestination? = null,
+    currentRoute: String,
     onItemSelectedChange: (String) -> Unit = {},
     onFabClick: () -> Unit = {},
     content: @Composable () -> Unit
 ) {
-    val currentRoute = currentDestination?.route ?: AppRoutes.HighlightsList.route
     val isShowScaffoldBars = panucciBottomAppBarScreens.any {
         it.first.route == currentRoute
     }
@@ -118,7 +124,7 @@ fun PanucciApp(
 private fun PanucciAppPreview() {
     PanucciTheme {
         Surface {
-            PanucciApp {}
+            PanucciApp(currentRoute = AppRoutes.HighlightsList.route) {}
         }
     }
 }

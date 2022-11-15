@@ -13,7 +13,6 @@ sealed class AppRoutes(val route: String) {
     object Login : AppRoutes("login")
     object SignIn : AppRoutes("signIn")
     object SignUp : AppRoutes("signUp")
-    object Home : AppRoutes("home")
     object ProductDetails : AppRoutes("productDetails")
 }
 

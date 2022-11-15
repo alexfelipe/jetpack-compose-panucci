@@ -2,6 +2,7 @@ package br.com.alexf.panucci.navigation
 
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
+import androidx.navigation.NavOptions
 import androidx.navigation.compose.composable
 import br.com.alexf.panucci.AppRoutes
 import br.com.alexf.panucci.sampledata.sampleProducts
@@ -20,6 +21,8 @@ fun NavGraphBuilder.highlightListScreen(
     }
 }
 
-fun NavController.navigateToHighlightListScreen() {
-    navigate(AppRoutes.HighlightsList.route)
+fun NavController.navigateToHighlightListScreen(
+    navOptions: NavOptions? = null
+) {
+    navigate(AppRoutes.HighlightsList.route, navOptions)
 }

@@ -5,6 +5,7 @@ import androidx.navigation.NavController
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
+import androidx.navigation.navOptions
 import br.com.alexf.panucci.navigation.*
 
 @Composable
@@ -22,16 +23,27 @@ fun AppNavHost(
                 navController.navigateToCheckoutScreen()
             },
             onNavigateToProductDetails = { productId ->
-                navController.navigateToProductDetails(productId = productId)
+                navController.navigateToHighlightListScreen(
+                    navOptions {
+                        launchSingleTop = true
+                    }
+                )
+                navController.navigateToProductDetails(
+                    productId = productId
+                )
             })
         menuScreen(
             onNavigateToProductDetails = { productId ->
-                navController.navigateToProductDetails(productId = productId)
+                navController.navigateToProductDetails(
+                    productId = productId
+                )
             }
         )
         drinksScreen(
             onNavigateToProductsDetails = { productId ->
-                navController.navigateToProductDetails(productId = productId)
+                navController.navigateToProductDetails(
+                    productId = productId
+                )
             }
         )
         checkoutScreen()
@@ -40,18 +52,6 @@ fun AppNavHost(
                 navController.navigateToCheckoutScreen()
             }
         )
-    }
-}
-
-fun NavController.navigateSingleTopTo(
-    route: String
-) {
-    navigate(route) {
-        popUpTo(graph.findStartDestination().id) {
-            saveState = true
-        }
-        launchSingleTop = true
-        restoreState = true
     }
 }
 
