@@ -13,6 +13,8 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import br.com.alura.panucci.sampledata.bottomAppBarItems
 import br.com.alura.panucci.ui.components.BottomAppBarItem
@@ -42,6 +44,17 @@ class MainActivity : ComponentActivity() {
                         },
                         onFabClick = {
                         }) {
+                        NavHost(
+                            navController = navController,
+                            startDestination = "menu"
+                        ) {
+                            composable("home") {
+                                HighlightsListScreen()
+                            }
+                            composable("menu") {
+                                MenuListScreen()
+                            }
+                        }
                     }
                 }
             }
