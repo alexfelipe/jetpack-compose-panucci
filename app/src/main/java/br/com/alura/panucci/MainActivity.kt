@@ -17,10 +17,12 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import br.com.alura.panucci.sampledata.bottomAppBarItems
+import br.com.alura.panucci.sampledata.sampleProducts
 import br.com.alura.panucci.ui.components.BottomAppBarItem
 import br.com.alura.panucci.ui.components.PanucciBottomAppBar
 import br.com.alura.panucci.ui.screens.*
 import br.com.alura.panucci.ui.theme.PanucciTheme
+import kotlinx.coroutines.delay
 
 class MainActivity : ComponentActivity() {
 
@@ -49,10 +51,13 @@ class MainActivity : ComponentActivity() {
                             startDestination = "menu"
                         ) {
                             composable("home") {
-                                HighlightsListScreen()
+                                HighlightsListScreen(products = sampleProducts)
                             }
                             composable("menu") {
                                 MenuListScreen()
+                                LaunchedEffect(Unit) {
+                                    navController.navigate("home")
+                                }
                             }
                         }
                     }
