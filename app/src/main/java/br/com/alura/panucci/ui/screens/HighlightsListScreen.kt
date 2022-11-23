@@ -23,8 +23,8 @@ fun HighlightsListScreen(
     modifier: Modifier = Modifier,
     title: String = "Destaques do dia",
     products: List<Product> = emptyList(),
-    onOrderClick: () -> Unit = {},
-    onProductClick: () -> Unit = {}
+    onNavigateProductDetails: () -> Unit = {},
+    onNavigateToCheckout: () -> Unit = {}
 ) {
     Column(
         modifier
@@ -51,9 +51,9 @@ fun HighlightsListScreen(
                 HighlightProductCard(
                     product = p,
                     Modifier.clickable {
-                        onProductClick()
+                        onNavigateProductDetails()
                     },
-                    onOrderClick = onOrderClick
+                    onOrderClick = onNavigateToCheckout
                 )
             }
         }
@@ -66,8 +66,8 @@ fun HighlightsListScreenPreview() {
     PanucciTheme {
         Surface {
             HighlightsListScreen(
-                products = sampleProducts,
-                title = "Destaques do dia"
+                title = "Destaques do dia",
+                products = sampleProducts
             )
         }
     }

@@ -1,5 +1,6 @@
 package br.com.alura.panucci.ui.screens
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -21,6 +22,7 @@ import br.com.alura.panucci.ui.theme.caveatFont
 fun MenuListScreen(
     modifier: Modifier = Modifier,
     products: List<Product> = emptyList(),
+    onNavigateToProductDetails: () -> Unit = {},
 ) {
     Column(
         modifier.fillMaxSize()
@@ -45,6 +47,9 @@ fun MenuListScreen(
             items(products) { p ->
                 MenuProductCard(
                     product = p,
+                    Modifier.clickable {
+                        onNavigateToProductDetails()
+                    }
                 )
             }
         }

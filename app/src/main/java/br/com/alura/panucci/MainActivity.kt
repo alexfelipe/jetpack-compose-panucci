@@ -66,19 +66,42 @@ class MainActivity : ComponentActivity() {
                             }
                         },
                         onFabClick = {
+                            navController.navigate("pedido")
                         }) {
                         NavHost(
                             navController = navController,
                             startDestination = "home"
                         ) {
                             composable("home") {
-                                HighlightsListScreen(products = sampleProducts)
+                                HighlightsListScreen(
+                                    products = sampleProducts,
+                                    onNavigateProductDetails = {
+                                        navController.navigate("detalhesProduto")
+                                    }
+                                ) {
+                                    navController.navigate("pedido")
+                                }
                             }
                             composable("menu") {
-                                MenuListScreen(products = sampleProducts)
+                                MenuListScreen(
+                                    products = sampleProducts,
+                                    onNavigateToProductDetails = {
+                                        navController.navigate("detalhesProduto")
+                                    })
                             }
                             composable("bebidas") {
-                                DrinksListScreen(products = sampleProducts)
+                                DrinksListScreen(
+                                    products = sampleProducts,
+                                    onNavigateProductDetails = {
+                                        navController.navigate("detalhesProduto")
+                                    }
+                                )
+                            }
+                            composable("detalhesProduto") {
+                                ProductDetailsScreen(product = sampleProducts.first())
+                            }
+                            composable("pedido") {
+                                CheckoutScreen(products = sampleProducts)
                             }
                         }
                     }
