@@ -5,14 +5,17 @@ import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.PointOfSale
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
@@ -31,8 +34,15 @@ class MainActivity : ComponentActivity() {
         setContent {
             val navController = rememberNavController()
             val currentBackStack by navController.currentBackStackEntryAsState()
+            LaunchedEffect(Unit) {
+                navController.addOnDestinationChangedListener { _, _, _ ->
+                    val backStackDestinations = navController.backQueue.map { it.destination.route }
+                    Log.i(
+                        "MainActivity", "onCreate: back stack destinations: $backStackDestinations"
+                    )
+                }
+            }
             val currentDestination = currentBackStack?.destination
-            Log.i("MainActivity", "onCreate: nav controller $navController")
             PanucciTheme {
                 Surface(
                     modifier = Modifier.fillMaxSize(),
