@@ -54,6 +54,7 @@ class MainActivity : ComponentActivity() {
                         mutableStateOf(item)
                     }
                     PanucciApp(
+                        currentDestination = currentDestination?.route,
                         bottomAppBarItemSelected = selectedItem,
                         onBottomAppBarItemSelectedChange = {
                             selectedItem = it
@@ -116,34 +117,49 @@ class MainActivity : ComponentActivity() {
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun PanucciApp(
+    currentDestination: String?,
     bottomAppBarItemSelected: BottomAppBarItem = bottomAppBarItems.first(),
     onBottomAppBarItemSelectedChange: (BottomAppBarItem) -> Unit = {},
     onFabClick: () -> Unit = {},
     content: @Composable () -> Unit
 ) {
+    val isShowFab = when (currentDestination) {
+        AppDestination.Menu.route,
+        AppDestination.Drinks.route -> true
+        else -> false
+    }
+    val containsInBottomAppBarItems = bottomAppBarItems.find {
+        it.destination.route == currentDestination
+    } != null
     Scaffold(
         topBar = {
-            CenterAlignedTopAppBar(
-                title = {
-                    Text(text = "Restorante Panucci")
-                },
-            )
+            if (containsInBottomAppBarItems) {
+                CenterAlignedTopAppBar(
+                    title = {
+                        Text(text = "Restorante Panucci")
+                    },
+                )
+            }
         },
         bottomBar = {
-            PanucciBottomAppBar(
-                item = bottomAppBarItemSelected,
-                items = bottomAppBarItems,
-                onItemChange = onBottomAppBarItemSelectedChange,
-            )
+            if (containsInBottomAppBarItems) {
+                PanucciBottomAppBar(
+                    item = bottomAppBarItemSelected,
+                    items = bottomAppBarItems,
+                    onItemChange = onBottomAppBarItemSelectedChange,
+                )
+            }
         },
         floatingActionButton = {
-            FloatingActionButton(
-                onClick = onFabClick
-            ) {
-                Icon(
-                    Icons.Filled.PointOfSale,
-                    contentDescription = null
-                )
+            if (isShowFab) {
+                FloatingActionButton(
+                    onClick = onFabClick
+                ) {
+                    Icon(
+                        Icons.Filled.PointOfSale,
+                        contentDescription = null
+                    )
+                }
             }
         }
     ) {
