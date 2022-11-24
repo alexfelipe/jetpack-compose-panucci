@@ -18,7 +18,8 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
-import br.com.alura.panucci.sampledata.bottomAppBarItems
+import br.com.alura.panucci.navigation.AppDestination
+import br.com.alura.panucci.navigation.bottomAppBarItems
 import br.com.alura.panucci.sampledata.sampleProducts
 import br.com.alura.panucci.ui.components.BottomAppBarItem
 import br.com.alura.panucci.ui.components.PanucciBottomAppBar
@@ -48,7 +49,7 @@ class MainActivity : ComponentActivity() {
                 ) {
                     var selectedItem by remember(currentDestination) {
                         val item = currentDestination?.let { destination ->
-                            bottomAppBarItems.find { destination.route == it.route }
+                            bottomAppBarItems.find { destination.route == it.destination.route }
                         } ?: bottomAppBarItems.first()
                         mutableStateOf(item)
                     }
@@ -57,7 +58,7 @@ class MainActivity : ComponentActivity() {
                         onBottomAppBarItemSelectedChange = {
                             selectedItem = it
                             val startDestination = navController.graph.findStartDestination().id
-                            navController.navigate(it.route) {
+                            navController.navigate(it.destination.route) {
                                 popUpTo(startDestination) {
                                     saveState = true
                                 }
@@ -66,41 +67,41 @@ class MainActivity : ComponentActivity() {
                             }
                         },
                         onFabClick = {
-                            navController.navigate("pedido")
+                            navController.navigate(AppDestination.Checkout.route)
                         }) {
                         NavHost(
                             navController = navController,
-                            startDestination = "home"
+                            startDestination = AppDestination.Highlight.route
                         ) {
-                            composable("home") {
+                            composable(AppDestination.Highlight.route) {
                                 HighlightsListScreen(
                                     products = sampleProducts,
                                     onNavigateProductDetails = {
-                                        navController.navigate("detalhesProduto")
+                                        navController.navigate(AppDestination.ProductDetails.route)
                                     }
                                 ) {
-                                    navController.navigate("pedido")
+                                    navController.navigate(AppDestination.Checkout.route)
                                 }
                             }
-                            composable("menu") {
+                            composable(AppDestination.Menu.route) {
                                 MenuListScreen(
                                     products = sampleProducts,
                                     onNavigateToProductDetails = {
-                                        navController.navigate("detalhesProduto")
+                                        navController.navigate(AppDestination.ProductDetails.route)
                                     })
                             }
-                            composable("bebidas") {
+                            composable(AppDestination.Drinks.route) {
                                 DrinksListScreen(
                                     products = sampleProducts,
                                     onNavigateProductDetails = {
-                                        navController.navigate("detalhesProduto")
+                                        navController.navigate(AppDestination.ProductDetails.route)
                                     }
                                 )
                             }
-                            composable("detalhesProduto") {
+                            composable(AppDestination.ProductDetails.route) {
                                 ProductDetailsScreen(product = sampleProducts.first())
                             }
-                            composable("pedido") {
+                            composable(AppDestination.Checkout.route) {
                                 CheckoutScreen(products = sampleProducts)
                             }
                         }
@@ -159,7 +160,7 @@ fun PanucciApp(
 private fun PanucciAppPreview() {
     PanucciTheme {
         Surface {
-            PanucciApp {}
+            PanucciApp(currentDestination = null) {}
         }
     }
 }
