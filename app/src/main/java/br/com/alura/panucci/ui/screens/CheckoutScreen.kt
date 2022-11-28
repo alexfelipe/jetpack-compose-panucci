@@ -1,6 +1,7 @@
 package br.com.alura.panucci.ui.screens
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -28,7 +29,8 @@ import br.com.alura.panucci.ui.theme.PanucciTheme
 @Composable
 fun CheckoutScreen(
     modifier: Modifier = Modifier,
-    products: List<Product> = emptyList()
+    products: List<Product> = emptyList(),
+    onOrderClick: () -> Unit = {},
 ) {
     Box(
         modifier.fillMaxSize()
@@ -140,7 +142,10 @@ fun CheckoutScreen(
                     Color(0xFF6750A4),
                     shape = RoundedCornerShape(100.dp)
                 )
-                .align(Alignment.BottomCenter),
+                .align(Alignment.BottomCenter)
+                .clickable {
+                    onOrderClick()
+                },
         ) {
             Row(
                 Modifier
