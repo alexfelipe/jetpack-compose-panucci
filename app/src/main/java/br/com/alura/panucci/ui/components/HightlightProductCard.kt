@@ -1,16 +1,15 @@
 package br.com.alura.panucci.ui.components
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextOverflow
@@ -62,31 +61,23 @@ fun HighlightProductCard(
                 )
             }
             Spacer(Modifier.height(18.dp))
-            Box(
+            Button(
                 modifier = Modifier
                     .padding(
                         start = 16.dp,
                         end = 16.dp,
                         bottom = 24.dp
                     )
-                    .background(
-                        Color(0xFF6750A4),
-                        shape = RoundedCornerShape(100)
-                    )
-                    .clip(shape = RoundedCornerShape(100))
                     .clickable {
                         onOrderClick()
                     }
-                    .padding(
-                        horizontal = 24.dp,
-                        vertical = 12.dp
-                    )
-                    .align(Alignment.End)
+                    .align(Alignment.End),
+                onClick = {
+                    onOrderClick()
+                }
             ) {
                 Text(
                     text = "Pedir",
-                    Modifier.align(Alignment.BottomEnd),
-                    color = Color.White
                 )
             }
         }

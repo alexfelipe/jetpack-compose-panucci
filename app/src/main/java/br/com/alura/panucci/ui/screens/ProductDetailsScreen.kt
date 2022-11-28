@@ -1,12 +1,10 @@
 package br.com.alura.panucci.ui.screens
 
+import android.util.Log
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.Surface
-import androidx.compose.material3.Text
+import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -24,8 +22,7 @@ import coil.compose.AsyncImage
 @Composable
 fun ProductDetailsScreen(
     product: Product,
-    modifier: Modifier = Modifier,
-    onOrderClick: () -> Unit = {}
+    modifier: Modifier = Modifier
 ) {
     Column(
         modifier
@@ -53,11 +50,10 @@ fun ProductDetailsScreen(
             Text(product.price.toPlainString(), fontSize = 18.sp)
             Text(product.description)
             Button(
-                onClick = onOrderClick,
+                onClick = { /*TODO*/ },
                 Modifier
                     .fillMaxWidth(),
-                colors = ButtonDefaults
-                    .buttonColors(containerColor = Color(0xFF6750A4))
+                colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.primary)
             ) {
                 Text(text = "Pedir")
             }

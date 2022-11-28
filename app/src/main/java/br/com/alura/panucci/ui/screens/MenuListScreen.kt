@@ -20,6 +20,7 @@ import br.com.alura.panucci.ui.theme.caveatFont
 @Composable
 fun MenuListScreen(
     modifier: Modifier = Modifier,
+    title: String = "Menu",
     products: List<Product> = emptyList(),
 ) {
     Column(
@@ -27,7 +28,7 @@ fun MenuListScreen(
     ) {
         Surface {
             Text(
-                text = "Menu",
+                text = title,
                 Modifier
                     .fillMaxWidth()
                     .padding(vertical = 8.dp),

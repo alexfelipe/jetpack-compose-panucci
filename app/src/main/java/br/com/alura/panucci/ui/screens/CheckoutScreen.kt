@@ -8,10 +8,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.AccountBalanceWallet
 import androidx.compose.material.icons.outlined.ArrowForwardIos
-import androidx.compose.material3.Icon
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Surface
-import androidx.compose.material3.Text
+import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -129,35 +126,25 @@ fun CheckoutScreen(
                 }
             }
         }
-        Box(
+        Button(
+            onClick = { /*TODO*/ },
             Modifier
                 .padding(
                     16.dp
                 )
-                .heightIn(50.dp)
                 .fillMaxWidth()
-                .background(
-                    Color(0xFF6750A4),
-                    shape = RoundedCornerShape(100.dp)
-                )
-                .align(Alignment.BottomCenter),
+                .align(Alignment.BottomCenter)
         ) {
-            Row(
-                Modifier
-                    .align(Alignment.Center)
-                    .padding(vertical = 14.dp)
-            ) {
-                Icon(
-                    Icons.Outlined.AccountBalanceWallet,
-                    contentDescription = null,
-                    tint = Color.White
-                )
-                Spacer(modifier = Modifier.width(8.dp))
-                Text(
-                    text = "Pedir",
-                    color = Color.White
-                )
-            }
+            Icon(
+                Icons.Outlined.AccountBalanceWallet,
+                contentDescription = null,
+                tint = Color.White
+            )
+            Spacer(modifier = Modifier.width(8.dp))
+            Text(
+                text = "Pedir",
+                color = Color.White
+            )
         }
     }
 }

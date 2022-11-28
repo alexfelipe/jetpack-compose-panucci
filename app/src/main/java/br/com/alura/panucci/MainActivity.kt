@@ -19,8 +19,8 @@ import br.com.alura.panucci.sampledata.sampleProductWithImage
 import br.com.alura.panucci.sampledata.sampleProducts
 import br.com.alura.panucci.ui.components.BottomAppBarItem
 import br.com.alura.panucci.ui.components.PanucciBottomAppBar
-import br.com.alura.panucci.ui.theme.PanucciTheme
 import br.com.alura.panucci.ui.screens.*
+import br.com.alura.panucci.ui.theme.PanucciTheme
 
 class MainActivity : ComponentActivity() {
 
@@ -71,10 +71,8 @@ class MainActivity : ComponentActivity() {
                                 products = sampleProducts + sampleProducts
                             )
                             "DetalhesProduto" -> ProductDetailsScreen(
-                                product = sampleProductWithImage,
-                                onOrderClick = {
-                                    screens.add("Pedido")
-                                })
+                                product = sampleProductWithImage
+                            )
                             "Pedido" -> CheckoutScreen(products = sampleProducts)
                         }
                     }
