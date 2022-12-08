@@ -5,6 +5,7 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
@@ -12,52 +13,66 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import br.com.alura.panucci.R
-import br.com.alura.panucci.model.Product
 import br.com.alura.panucci.sampledata.sampleProducts
+import br.com.alura.panucci.ui.states.ProductDetailsUiState
+import br.com.alura.panucci.ui.states.toProductDetailsUiStateProduct
 import br.com.alura.panucci.ui.theme.PanucciTheme
 import coil.compose.AsyncImage
 
 @Composable
 fun ProductDetailsScreen(
-    product: Product,
     modifier: Modifier = Modifier,
-    onNavigateToCheckout: () -> Unit = {}
+    state: ProductDetailsUiState,
+    onNavigateToCheckout: () -> Unit = {},
+    onFailureProductLoading: () -> Unit = {}
 ) {
-    Column(
-        modifier
-            .fillMaxSize()
-            .verticalScroll(rememberScrollState())
-    ) {
-        product.image?.let {
-            AsyncImage(
-                model = product.image,
-                contentDescription = null,
-                modifier = Modifier
-                    .height(200.dp)
-                    .fillMaxWidth(),
-                placeholder = painterResource(id = R.drawable.placeholder),
-                contentScale = ContentScale.Crop
-            )
+    when (state) {
+        ProductDetailsUiState.Failure -> onFailureProductLoading()
+        ProductDetailsUiState.Loading -> {
+            Box(Modifier.fillMaxSize()) {
+                CircularProgressIndicator(Modifier.align(Alignment.Center))
+            }
         }
-        Column(
-            Modifier
-                .padding(16.dp)
-                .fillMaxSize(),
-            verticalArrangement = Arrangement.spacedBy(8.dp)
-        ) {
-            Text(product.name, fontSize = 24.sp)
-            Text(product.price.toPlainString(), fontSize = 18.sp)
-            Text(product.description)
-            Button(
-                onClick = { onNavigateToCheckout() },
-                Modifier
-                    .fillMaxWidth(),
-                colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.primary)
+        is ProductDetailsUiState.Success -> {
+            val product = state.product
+            Column(
+                modifier
+                    .fillMaxSize()
+                    .verticalScroll(rememberScrollState())
             ) {
-                Text(text = "Pedir")
+                product.image?.let {
+                    AsyncImage(
+                        model = product.image,
+                        contentDescription = null,
+                        modifier = Modifier
+                            .height(200.dp)
+                            .fillMaxWidth(),
+                        placeholder = painterResource(id = R.drawable.placeholder),
+                        contentScale = ContentScale.Crop
+                    )
+                }
+                Column(
+                    Modifier
+                        .padding(16.dp)
+                        .fillMaxSize(),
+                    verticalArrangement = Arrangement.spacedBy(8.dp)
+                ) {
+                    Text(product.name, fontSize = 24.sp)
+                    Text(product.price, fontSize = 18.sp)
+                    Text(product.description)
+                    Button(
+                        onClick = { onNavigateToCheckout() },
+                        Modifier
+                            .fillMaxWidth(),
+                        colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.primary)
+                    ) {
+                        Text(text = "Pedir")
+                    }
+                }
             }
         }
     }
+
 }
 
 @Preview
@@ -66,7 +81,11 @@ fun ProductDetailsScreenPreview() {
     PanucciTheme {
         Surface {
             ProductDetailsScreen(
-                product = sampleProducts.random(),
+                state = ProductDetailsUiState.Success(
+                    product = sampleProducts
+                        .random()
+                        .toProductDetailsUiStateProduct()
+                )
             )
         }
     }

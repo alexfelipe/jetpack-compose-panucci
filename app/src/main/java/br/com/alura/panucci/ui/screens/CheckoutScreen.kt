@@ -20,12 +20,13 @@ import androidx.compose.ui.unit.sp
 import br.com.alura.panucci.model.Product
 import br.com.alura.panucci.sampledata.sampleProducts
 import br.com.alura.panucci.ui.components.CheckoutItemCard
+import br.com.alura.panucci.ui.states.CheckoutUiState
 import br.com.alura.panucci.ui.theme.PanucciTheme
 
 @Composable
 fun CheckoutScreen(
     modifier: Modifier = Modifier,
-    products: List<Product> = emptyList(),
+    state: CheckoutUiState = CheckoutUiState(),
     onPopBackStack: () -> Unit = {}
 ) {
     Box(
@@ -48,7 +49,7 @@ fun CheckoutScreen(
                 )
                 Spacer(modifier = Modifier.height(16.dp))
             }
-            items(products) { p ->
+            items(state.products) { p ->
                 CheckoutItemCard(product = p)
                 Spacer(Modifier.height(16.dp))
             }
@@ -156,7 +157,9 @@ fun CheckoutScreenPreview() {
     PanucciTheme {
         Surface {
             CheckoutScreen(
-                products = sampleProducts
+                state = CheckoutUiState(
+                    products = sampleProducts
+                )
             )
         }
     }

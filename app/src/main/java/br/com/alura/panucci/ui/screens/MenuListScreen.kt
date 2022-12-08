@@ -15,14 +15,15 @@ import androidx.compose.ui.unit.sp
 import br.com.alura.panucci.model.Product
 import br.com.alura.panucci.sampledata.sampleProducts
 import br.com.alura.panucci.ui.components.MenuProductCard
+import br.com.alura.panucci.ui.states.MenuUiState
 import br.com.alura.panucci.ui.theme.PanucciTheme
 import br.com.alura.panucci.ui.theme.caveatFont
 
 @Composable
 fun MenuListScreen(
     modifier: Modifier = Modifier,
+    state: MenuUiState = MenuUiState(),
     title: String = "Menu",
-    products: List<Product> = emptyList(),
     onNavigateToDetails: (Product) -> Unit = {}
 ) {
     Column(
@@ -45,7 +46,7 @@ fun MenuListScreen(
             contentPadding = PaddingValues(16.dp),
             verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
-            items(products) { p ->
+            items(state.products) { p ->
                 MenuProductCard(
                     product = p,
                     Modifier
@@ -64,7 +65,9 @@ fun MenuListScreenPreview() {
     PanucciTheme {
         Surface {
             MenuListScreen(
-                products = sampleProducts
+                state = MenuUiState(
+                    products = sampleProducts
+                )
             )
         }
     }

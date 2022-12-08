@@ -11,7 +11,6 @@ fun PanucciNavHost(navController: NavHostController) {
         navController = navController,
         startDestination = AppDestination.Highlight.route
     ) {
-        // TODO implementar o view model para cada tela
         // TODO utilizar o hilt para carregar o view model
         // TODO usar o nested graph para a tela que contém as abas
         // TODO modificar a tela de bebidas e detalhes do produto para acessar via deep link

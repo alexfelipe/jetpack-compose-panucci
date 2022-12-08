@@ -17,6 +17,7 @@ import androidx.compose.ui.unit.sp
 import br.com.alura.panucci.model.Product
 import br.com.alura.panucci.sampledata.sampleProducts
 import br.com.alura.panucci.ui.components.DrinkProductCard
+import br.com.alura.panucci.ui.states.DrinksUiState
 import br.com.alura.panucci.ui.theme.PanucciTheme
 import br.com.alura.panucci.ui.theme.caveatFont
 
@@ -25,7 +26,7 @@ import br.com.alura.panucci.ui.theme.caveatFont
 fun DrinksListScreen(
     modifier: Modifier = Modifier,
     title: String = "Bebidas",
-    products: List<Product> = emptyList(),
+    state: DrinksUiState = DrinksUiState(),
     columns: Int = 2,
     onNavigateToDetails: (Product) -> Unit = {}
 ) {
@@ -51,7 +52,7 @@ fun DrinksListScreen(
             verticalArrangement = Arrangement.spacedBy(16.dp),
             horizontalArrangement = Arrangement.spacedBy(16.dp)
         ) {
-            items(products) { p ->
+            items(state.products) { p ->
                 DrinkProductCard(
                     product = p,
                     Modifier.clickable {
@@ -69,7 +70,7 @@ fun DrinksListScreenPreview() {
     PanucciTheme {
         Surface {
             DrinksListScreen(
-                products = sampleProducts,
+                state = DrinksUiState(),
                 title = "Bebidas"
             )
         }
