@@ -1,13 +1,9 @@
 package br.com.alura.panucci.sampledata
 
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.AutoAwesome
-import androidx.compose.material.icons.filled.RestaurantMenu
-import androidx.compose.material.icons.outlined.LocalBar
 import androidx.compose.ui.tooling.preview.datasource.LoremIpsum
 import br.com.alura.panucci.model.Product
-import br.com.alura.panucci.ui.components.BottomAppBarItem
 import java.math.BigDecimal
+import java.util.*
 import kotlin.random.Random
 
 private val loremName = LoremIpsum(Random.nextInt(10)).values.first()
@@ -27,7 +23,13 @@ val sampleProductWithoutImage = Product(
 )
 
 val sampleProducts = List(10) { index ->
+    val id = if (0 == index) {
+        "22747912-987c-4523-8419-fe5bac03b207"
+    } else {
+        UUID.randomUUID().toString()
+    }
     Product(
+        id = id,
         name = loremName,
         price = BigDecimal("9.99"),
         description = loremDesc,

@@ -1,5 +1,6 @@
 package br.com.alura.panucci
 
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import androidx.activity.ComponentActivity
@@ -12,14 +13,15 @@ import androidx.compose.material.icons.filled.PointOfSale
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.core.net.toUri
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
-import androidx.navigation.navOptions
 import br.com.alura.panucci.navigation.*
-import br.com.alura.panucci.ui.PanucciNavHost
 import br.com.alura.panucci.ui.components.BottomAppBarItem
 import br.com.alura.panucci.ui.components.PanucciBottomAppBar
+import br.com.alura.panucci.ui.components.bottomAppBarItems
 import br.com.alura.panucci.ui.screens.*
 import br.com.alura.panucci.ui.theme.PanucciTheme
 
@@ -28,6 +30,7 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
+            val context = LocalContext.current
             val navController = rememberNavController()
             LaunchedEffect(Unit) {
                 navController.addOnDestinationChangedListener { _, _, _ ->
@@ -45,45 +48,42 @@ class MainActivity : ComponentActivity() {
                     color = MaterialTheme.colorScheme.background
                 ) {
                     val selectedItem by remember(currentDestination) {
-                        val item = currentDestination?.let { destination ->
-                            bottomAppBarItems.find {
-                                it.destination.route == destination.route
-                            }
-                        } ?: bottomAppBarItems.first()
+                        val item = when (currentDestination?.route) {
+                            menuRoute -> BottomAppBarItem.Menu
+                            drinksRoute -> BottomAppBarItem.Drinks
+                            else -> BottomAppBarItem.HighlightItem
+                        }
                         mutableStateOf(item)
                     }
-                    val containsInBottomAppBarItems = currentDestination?.let { destination ->
-                        bottomAppBarItems.find {
-                            it.destination.route == destination.route
+                    val containsInBottomAppBarItems =
+                        when (currentDestination?.route) {
+                            highlightsRoute, menuRoute, drinksRoute -> true
+                            else -> false
                         }
-                    } != null
                     val isShowFab = when (currentDestination?.route) {
-                        AppDestination.Menu.route,
-                        AppDestination.Drinks.route -> true
+                        menuRoute,
+                        drinksRoute -> true
                         else -> false
                     }
                     PanucciApp(
                         bottomAppBarItemSelected = selectedItem,
                         onBottomAppBarItemSelectedChange = {
-                            // TODO investigar melhoria de implementação
-                            when (it.destination) {
-                                AppDestination.Highlight ->
-                                    navController.navigateSingleTopToHighlightsList(
-                                        isPopUpto = true
-                                    )
-                                AppDestination.Menu ->
-                                    navController.navigateSingleTopToMenuList(
-                                        isPopUpTo = true
-                                    )
-                                AppDestination.Drinks ->
-                                    navController.navigateSingleTopToDrinks(
-                                        isPopUpTo = true
-                                    )
-                                else -> return@PanucciApp
+                            when (it) {
+                                BottomAppBarItem.Drinks -> navController.navigateSingleTopToDrinks()
+                                BottomAppBarItem.HighlightItem -> navController.navigateSingleTopToHighlightsList()
+                                BottomAppBarItem.Menu -> navController.navigateSingleTopToMenuList()
                             }
                         },
                         onFabClick = {
-                            navController.navigateToCheckout()
+                            Intent(
+                                Intent.ACTION_VIEW,
+                                uri.toUri(),
+                                context,
+                                MainActivity::class.java
+                            ).run {
+                                startActivity(this)
+                            }
+//                            navController.navigateToCheckout()
                         },
                         isShowTopBar = containsInBottomAppBarItems,
                         isShowBottomBar = containsInBottomAppBarItems,
@@ -101,7 +101,7 @@ class MainActivity : ComponentActivity() {
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun PanucciApp(
-    bottomAppBarItemSelected: BottomAppBarItem = bottomAppBarItems.first(),
+    bottomAppBarItemSelected: BottomAppBarItem = BottomAppBarItem.HighlightItem,
     onBottomAppBarItemSelectedChange: (BottomAppBarItem) -> Unit = {},
     onFabClick: () -> Unit = {},
     isShowTopBar: Boolean = false,

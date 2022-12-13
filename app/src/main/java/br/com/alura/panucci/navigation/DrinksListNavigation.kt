@@ -5,18 +5,20 @@ import androidx.compose.runtime.getValue
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
-import androidx.navigation.NavOptions
 import androidx.navigation.compose.composable
-import br.com.alura.panucci.sampledata.sampleProducts
+import androidx.navigation.navDeepLink
 import br.com.alura.panucci.ui.screens.DrinksListScreen
 import br.com.alura.panucci.ui.viewmodels.DrinksViewModel
 
-private val destination = AppDestination.Drinks.route
+const val drinksRoute = "drinks"
 
 fun NavGraphBuilder.drinksListScreen(
     onNavigateToDetails: (String) -> Unit = {}
 ) {
-    composable(destination) {
+    composable(
+        drinksRoute,
+        deepLinks = listOf(navDeepLink { uriPattern = "$uri/$drinksRoute" })
+    ) {
         val viewModel: DrinksViewModel = viewModel()
         val uiState by viewModel.uiState.collectAsState()
         DrinksListScreen(
@@ -31,10 +33,10 @@ fun NavGraphBuilder.drinksListScreen(
 fun NavController.navigateSingleTopToDrinks(
     isPopUpTo: Boolean = false
 ) {
-    navigate(destination) {
+    navigate(drinksRoute) {
         launchSingleTop = true
         if (isPopUpTo) {
-            popUpTo(destination)
+            popUpTo(drinksRoute)
         }
     }
 }

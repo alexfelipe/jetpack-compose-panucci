@@ -11,12 +11,12 @@ import br.com.alura.panucci.ui.screens.MenuListScreen
 import br.com.alura.panucci.ui.states.MenuUiState
 import br.com.alura.panucci.ui.viewmodels.MenuViewModel
 
-private val destination = AppDestination.Menu.route
+const val menuRoute = "menu"
 
 fun NavGraphBuilder.menuListScreen(
     onNavigateToDetails: (String) -> Unit
 ) {
-    composable(destination) {
+    composable(menuRoute) {
         val viewModel = viewModel<MenuViewModel>()
         val uiState by viewModel.uiState.collectAsState()
         MenuListScreen(
@@ -31,10 +31,10 @@ fun NavGraphBuilder.menuListScreen(
 fun NavController.navigateSingleTopToMenuList(
     isPopUpTo: Boolean = false
 ) {
-    navigate(destination) {
+    navigate(menuRoute) {
         launchSingleTop = true
         if (isPopUpTo) {
-            popUpTo(destination)
+            popUpTo(menuRoute)
         }
     }
 }
