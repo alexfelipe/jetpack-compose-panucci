@@ -4,13 +4,16 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import br.com.alura.panucci.dao.ProductDao
 import br.com.alura.panucci.ui.states.MenuUiState
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class MenuViewModel(
-    private val dao: ProductDao = ProductDao()
+@HiltViewModel
+class MenuViewModel @Inject constructor(
+    private val dao: ProductDao
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(MenuUiState())

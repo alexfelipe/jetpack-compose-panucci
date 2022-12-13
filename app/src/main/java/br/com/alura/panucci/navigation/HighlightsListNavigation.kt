@@ -2,6 +2,7 @@ package br.com.alura.panucci.navigation
 
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
@@ -18,7 +19,7 @@ fun NavGraphBuilder.highlightsListScreen(
     composable(
         highlightsRoute
     ) {
-        val viewModel = viewModel<HighlightsViewModel>()
+        val viewModel = hiltViewModel<HighlightsViewModel>()
         val uiState by viewModel.uiState.collectAsState()
         HighlightsListScreen(
             state = uiState,

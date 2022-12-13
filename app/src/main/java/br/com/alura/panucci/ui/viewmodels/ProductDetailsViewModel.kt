@@ -1,16 +1,18 @@
 package br.com.alura.panucci.ui.viewmodels
 
-import androidx.lifecycle.AbstractSavedStateViewModelFactory
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import br.com.alura.panucci.dao.ProductDao
 import br.com.alura.panucci.ui.states.ProductDetailsUiState
 import br.com.alura.panucci.ui.states.toProductDetailsUiStateProduct
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
+import javax.inject.Inject
 
-class ProductDetailsViewModel(
+@HiltViewModel
+class ProductDetailsViewModel @Inject constructor(
     stateHandle: SavedStateHandle,
     private val dao: ProductDao = ProductDao()
 ) : ViewModel() {
@@ -31,21 +33,6 @@ class ProductDetailsViewModel(
                 ProductDetailsUiState.Failure
             }
         }
-    }
-
-}
-
-class ProductDetailsViewModelFactory : AbstractSavedStateViewModelFactory() {
-
-    @Suppress("UNCHECKED_CAST")
-    override fun <T : ViewModel> create(
-        key: String,
-        modelClass: Class<T>,
-        handle: SavedStateHandle
-    ): T {
-        return ProductDetailsViewModel(
-            stateHandle = handle
-        ) as T
     }
 
 }

@@ -13,7 +13,6 @@ fun PanucciNavHost(navController: NavHostController) {
         navController = navController,
         startDestination = HomeRouteGraphRoute
     ) {
-        // TODO utilizar o hilt para carregar o view model
         homeGraph(navController)
         productDetailsScreen(
             onNavigateToCheckout = {
