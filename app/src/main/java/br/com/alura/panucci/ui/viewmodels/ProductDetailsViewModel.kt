@@ -14,17 +14,21 @@ class ProductDetailsViewModel(
     private val dao: ProductDao = ProductDao()
 ) : ViewModel() {
 
-    private val _uiState = MutableStateFlow(ProductDetailsUiState())
+    private val _uiState = MutableStateFlow<ProductDetailsUiState>(
+        ProductDetailsUiState.Loading
+    )
     val uiState = _uiState.asStateFlow()
 
     fun findProductById(id: String) {
         viewModelScope.launch {
+            _uiState.update { ProductDetailsUiState.Loading }
             delay(5000)
-            dao.findById(id)?.let { product ->
-                _uiState.update {
-                    it.copy(product = product)
-                }
-            }
+            val uiState = dao.findById(id)?.let { product ->
+                ProductDetailsUiState.Success(
+                    product = product
+                )
+            } ?: ProductDetailsUiState.Failure
+            _uiState.update { uiState }
         }
     }
 
