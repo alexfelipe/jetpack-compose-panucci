@@ -8,7 +8,6 @@ import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.composable
-import br.com.alura.panucci.sampledata.sampleProducts
 import br.com.alura.panucci.ui.screens.ProductDetailsScreen
 import br.com.alura.panucci.ui.viewmodels.ProductDetailsViewModel
 
@@ -29,6 +28,12 @@ fun NavGraphBuilder.productDetailsScreen(navController: NavHostController) {
                 onNavigateToCheckout = {
                     navController.navigateToCheckout()
                 },
+                onTryLoadingProduct = {
+                    viewModel.findProductById(id)
+                },
+                onPopBackStack = {
+                    navController.navigateUp()
+                }
             )
         } ?: LaunchedEffect(Unit) {
             navController.navigateUp()

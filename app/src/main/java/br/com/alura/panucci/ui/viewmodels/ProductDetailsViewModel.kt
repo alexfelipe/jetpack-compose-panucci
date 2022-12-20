@@ -22,7 +22,7 @@ class ProductDetailsViewModel(
     fun findProductById(id: String) {
         viewModelScope.launch {
             _uiState.update { ProductDetailsUiState.Loading }
-            delay(5000)
+            delay(2000)
             val uiState = dao.findById(id)?.let { product ->
                 ProductDetailsUiState.Success(
                     product = product
