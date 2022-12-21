@@ -1,5 +1,7 @@
 package br.com.alura.panucci
 
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import androidx.activity.ComponentActivity
@@ -25,6 +27,7 @@ class MainActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
         setContent {
             val navController = rememberNavController()
             LaunchedEffect(Unit) {
@@ -66,7 +69,10 @@ class MainActivity : ComponentActivity() {
                             navController.navigateToSingleTopWithPopUpToRoute(it)
                         },
                         onFabClick = {
-                            navController.navigate(AppDestination.Checkout.route)
+                            Intent(null, Uri.parse("alura://panucci.com.br/drinks")).apply {
+                                startActivity(this)
+                            }
+//                            navController.navigate(AppDestination.Checkout.route)
                         },
                         isShowTopBar = containsInBottomAppBarItems,
                         isShowBottomBar = containsInBottomAppBarItems,

@@ -9,6 +9,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import kotlin.random.Random
 
 class ProductDetailsViewModel(
     private val dao: ProductDao = ProductDao()
@@ -22,7 +23,8 @@ class ProductDetailsViewModel(
     fun findProductById(id: String) {
         viewModelScope.launch {
             _uiState.update { ProductDetailsUiState.Loading }
-            delay(2000)
+            val timeInMillis: Long = Random.nextLong(500, 2000)
+            delay(timeInMillis)
             val uiState = dao.findById(id)?.let { product ->
                 ProductDetailsUiState.Success(
                     product = product
