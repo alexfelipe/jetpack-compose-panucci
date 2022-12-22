@@ -3,6 +3,7 @@ package br.com.alura.panucci.sampledata
 import androidx.compose.ui.tooling.preview.datasource.LoremIpsum
 import br.com.alura.panucci.model.Product
 import java.math.BigDecimal
+import java.util.UUID
 import kotlin.random.Random
 
 private val loremName = LoremIpsum(Random.nextInt(10)).values.first()
@@ -22,9 +23,15 @@ val sampleProductWithoutImage = Product(
 )
 
 val sampleProducts = List(10) { index ->
+    val (id, price) = if (index == 1) {
+        Pair("9adccd9a-3918-4996-8c96-2f5b9143cef2", "10.99")
+    } else {
+        Pair(UUID.randomUUID().toString(), "9.99")
+    }
     Product(
+        id = id,
         name = loremName,
-        price = BigDecimal("9.99"),
+        price = BigDecimal(price),
         description = loremDesc,
         image = if (index % 2 == 0) "https://picsum.photos/1920/1080" else null
     )
