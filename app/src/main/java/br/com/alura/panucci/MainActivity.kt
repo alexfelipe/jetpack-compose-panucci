@@ -2,6 +2,7 @@ package br.com.alura.panucci
 
 import android.os.Bundle
 import android.util.Log
+import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.Box
@@ -41,6 +42,13 @@ class MainActivity : ComponentActivity() {
             }
             val backStackEntryState by navController.currentBackStackEntryAsState()
             val currentDestination = backStackEntryState?.destination
+            val backStackValues = backStackEntryState?.savedStateHandle?.getStateFlow<String?>(
+                "successed_order",
+                null
+            )?.collectAsState()?.value
+            backStackValues?.let {
+                Toast.makeText(this, it, Toast.LENGTH_SHORT).show()
+            }
             PanucciTheme {
                 Surface(
                     modifier = Modifier.fillMaxSize(),
@@ -56,7 +64,7 @@ class MainActivity : ComponentActivity() {
                         }
                         mutableStateOf(item)
                     }
-                    val containsInBottomAppBarItems = when(currentRoute) {
+                    val containsInBottomAppBarItems = when (currentRoute) {
                         highlightsListRoute, menuRoute, drinksRoute -> true
                         else -> false
                     }
