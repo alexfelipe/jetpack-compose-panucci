@@ -116,3 +116,15 @@ fun ProductDetailsScreenWithFailurePreview() {
         }
     }
 }
+
+@Preview
+@Composable
+fun ProductDetailsScreenWithLoadingPreview() {
+    PanucciTheme {
+        Surface {
+            ProductDetailsScreen(
+                uiState = ProductDetailsUiState.Loading,
+            )
+        }
+    }
+}

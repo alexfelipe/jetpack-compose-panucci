@@ -1,5 +1,6 @@
 package br.com.alura.panucci.navigation
 
+import android.util.Log
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -7,35 +8,45 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
+import androidx.navigation.navDeepLink
 import br.com.alura.panucci.ui.screens.ProductDetailsScreen
 import br.com.alura.panucci.ui.viewmodels.ProductDetailsViewModel
 
 private const val productDetailsRoute = "productDetails"
 internal const val productIdArgument = "productId"
+private const val promoCode = "promoCode"
 
 fun NavGraphBuilder.productDetailsScreen(
     onNavigateToCheckout: () -> Unit,
     onPopBackStack: () -> Unit
 ) {
     composable(
-        "$productDetailsRoute/{$productIdArgument}"
+        "$productDetailsRoute/{$productIdArgument}",
+        deepLinks = listOf(navDeepLink {
+            uriPattern = "$uri/$productDetailsRoute/{$productIdArgument}?$promoCode={$promoCode}"
+        })
     ) { backStackEntry ->
-        backStackEntry.arguments?.getString(productIdArgument)?.let { id ->
-            val viewModel = viewModel<ProductDetailsViewModel>(
-                factory = ProductDetailsViewModel.Factory
-            )
-            val uiState by viewModel.uiState.collectAsState()
-            ProductDetailsScreen(
-                uiState = uiState,
-                onOrderClick = onNavigateToCheckout,
-                onTryFindProductAgainClick = {
-                    viewModel.findProductById(id)
-                },
-                onBackClick = onPopBackStack
-            )
-        } ?: LaunchedEffect(Unit) {
-            onPopBackStack()
+        backStackEntry.arguments?.let { arguments ->
+            val promoCode = arguments.getString(promoCode)
+            Log.i("ProductDetails", "productDetailsScreen: $promoCode")
+            arguments.getString(productIdArgument)?.let { id ->
+                val viewModel = viewModel<ProductDetailsViewModel>(
+                    factory = ProductDetailsViewModel.Factory
+                )
+                val uiState by viewModel.uiState.collectAsState()
+                ProductDetailsScreen(
+                    uiState = uiState,
+                    onOrderClick = onNavigateToCheckout,
+                    onTryFindProductAgainClick = {
+                        viewModel.findProductById(id)
+                    },
+                    onBackClick = onPopBackStack
+                )
+            } ?: LaunchedEffect(Unit) {
+                onPopBackStack()
+            }
         }
+
     }
 }
 
