@@ -6,11 +6,11 @@ import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.navigation.compose.ComposeNavigator
 import androidx.navigation.testing.TestNavHostController
 import br.com.alura.panucci.navigation.PanucciNavHost
-import kotlinx.coroutines.*
+import kotlinx.coroutines.MainScope
+import kotlinx.coroutines.launch
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
-import kotlin.coroutines.CoroutineContext
 
 class NavigationTest {
 

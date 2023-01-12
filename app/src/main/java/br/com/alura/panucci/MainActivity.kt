@@ -46,8 +46,10 @@ class MainActivity : ComponentActivity() {
                 "successed_order",
                 null
             )?.collectAsState()?.value
+            Log.i("MainActivity", "onCreate: $backStackValues")
             backStackValues?.let {
                 Toast.makeText(this, it, Toast.LENGTH_SHORT).show()
+                backStackEntryState?.savedStateHandle?.set("successed_order", null)
             }
             PanucciTheme {
                 Surface(
